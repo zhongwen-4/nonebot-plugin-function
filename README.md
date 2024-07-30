@@ -16,7 +16,13 @@
 ~~作者是个废物,还有许多功能待完善,代码写的也全是BUG,所以..等我哪天想起来了再更新吧~~
 
 ## 如何安装
+使用PIP:
 
 ```
 pip install nonebot-plugin-function
+```
+
+使用NoneBot:
+```
+nb plugin install nonebot-plugin-function
 ```
