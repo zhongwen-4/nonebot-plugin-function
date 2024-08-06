@@ -1,4 +1,5 @@
 # 欢迎使用本插件
+![Static Badge](https://img.shields.io/badge/github.com%2Fzhongwen-4%2Fnonebot-plugin-function)
 本插件混合了一些奇奇怪怪的功能, 例如私聊bot消息转发, 点歌, 戳一戳~~骂人~~
 ## 指令
 |指令|功能|
