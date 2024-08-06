@@ -45,9 +45,9 @@ async def a_handle():
     await a_word.finish(f"{hitokoto}    ----{who}[{source}]")
 
 @poke.handle()
-async def poke_handle(bot: Bot, event: GroupMessageEvent , t: PokeNotifyEvent):
+async def poke_handle(bot: Bot, event: GroupMessageEvent):
     if event.sub_type == "poke":
-        if str(event.get_user_id()) != event.self_id and t.target_id == event.self_id:
+        if str(event.get_user_id()) != event.self_id :
             t = Target(id = event.get_user_id(), private= True, scope = SupportScope.qq_client)
             async with AsyncClient() as client:
                 text = await client.get("https://act.jiawei.xin:10086/lib/api/maren.php")
@@ -72,7 +72,7 @@ async def f_handle(event: FriendRequestEvent):
             )
         
 @approve.handle()
-async def a_handle(bot: Bot, event: MessageEvent):
+async def app_handle(bot: Bot, event: MessageEvent):
     i = event.message.extract_plain_text()
     a = i[2:]
 
@@ -129,7 +129,9 @@ async def mi_handle(event: GroupMessageEvent, bot: Bot):
     else:
         user_id = event.get_message().extract_plain_text()
         user_id = user_id[3:]
-    re = await bot.call_api("get_stranger_info", user_id= user_id)
+
+    re = await bot.call_api("get_stranger_info", user_id= user_id) # type: ignore
+
     await msg_id.finish(str(re))
 
 @debug.handle()
@@ -137,7 +139,9 @@ async def debug_handle(event: MessageEvent):
         title = event.get_message().extract_plain_text()
         title = title[2:]
         async with AsyncClient() as cli:
-            url = await cli.get(f"https://api.xingzhige.com/API/Kugou_GN_new/?name={quote(title)}")
+            p = {"name": title}
+            url = await cli.get(f"https://api.xingzhige.com/API/Kugou_GN_new/", params= p)
+            
             url= url.json()
 
             ti = [i["songname"] for i in url["data"] if "songname" in i]
@@ -158,17 +162,24 @@ async def debug_handle(event: MessageEvent):
             return
 
         async with AsyncClient() as cli:
-            url = await cli.get(f"https://api.xingzhige.com/API/Kugou_GN_new/?name={quote(title)}&n={resp}")
-            url= url.json()
 
-            data = MusicShare(
-                kind= MusicShareKind.QQMusic,
-                title= url["data"]["songname"],
-                content= url["data"]["name"],
-                url= url["data"]["songurl"],
-                audio= url["data"]["src"],
-                thumbnail= url["data"]["cover"]
-            )
+            params = {"name": title, "n": resp}
+            url = await cli.get(f"https://api.xingzhige.com/API/Kugou_GN_new/", params= params)
+            if url.status_code == 200:
+                url= url.json()
+            
 
-            data = UniMessage(data)
-            await data.finish()
+                data = MusicShare(
+                    kind= MusicShareKind.QQMusic,
+                    title= url["data"]["songname"],
+                    content= url["data"]["name"],
+                    url= url["data"]["songurl"],
+                    audio= url["data"]["src"],
+                    thumbnail= url["data"]["cover"]
+                )
+
+                data = UniMessage(data)
+                await data.finish()
+            
+            else:
+                await debug.finish("API请求错误, 可能是API跑路了")
