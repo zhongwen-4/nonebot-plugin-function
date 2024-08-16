@@ -142,13 +142,17 @@ async def debug_handle(event: MessageEvent):
             p = {"name": title}
             url = await cli.get(f"https://api.xingzhige.com/API/Kugou_GN_new/", params= p)
             
-            url= url.json()
+            if url.status_code == 200:
+                url= url.json()
 
-            ti = [i["songname"] for i in url["data"] if "songname" in i]
-            name = [i["name"] for i in url["data"] if "name" in i]
+                ti = [i["songname"] for i in url["data"] if "songname" in i]
+                name = [i["name"] for i in url["data"] if "name" in i]
 
-            output = "\n".join(f"{i+1}: {a_item} - {b_item}" for i,(a_item, b_item) in enumerate(zip(ti, name)))
-            await debug.send(f"{output}\n\nPS: 请在十五秒内输入序号")
+                output = "\n".join(f"{i+1}: {a_item} - {b_item}" for i,(a_item, b_item) in enumerate(zip(ti, name)))
+                await debug.send(f"{output}\n\nPS: 请在十五秒内输入序号")
+            
+            else:
+                await debug.finish("获取链接的时候404了", at_sender= True)
 
         @waiter(waits=["message"], keep_session=True)
         async def check(event: GroupMessageEvent):
