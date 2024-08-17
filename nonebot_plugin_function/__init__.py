@@ -183,7 +183,7 @@ async def debug_handle(event: MessageEvent):
                 )
 
                 data = UniMessage(data)
-                await data.finish()
+                return
             
             else:
                 await debug.finish("API请求错误, 可能是API跑路了")
