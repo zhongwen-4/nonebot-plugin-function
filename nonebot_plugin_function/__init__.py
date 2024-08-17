@@ -98,6 +98,7 @@ async def mf_handle(event: PrivateMessageEvent):
     msg = event.get_message()
     user_id = event.get_user_id()
     name = event.sender.nickname
+    
     if user_id != "2401128923":
         t = Target(id ="2401128923", private= True, scope = SupportScope.qq_client)
         log = event.get_log_string()
