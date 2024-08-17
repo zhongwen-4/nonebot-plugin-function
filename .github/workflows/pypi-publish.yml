@@ -1,0 +1,31 @@
+name: Build and Upload to PyPI
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  build_and_upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install pdm
+        run: pip install pdm
+
+      - name: Build with pdm
+        run: pdm build
+
+      - name: Upload to PyPI
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        
+        run: pdm publish
