@@ -1,6 +1,5 @@
 import json, os
 from httpx import AsyncClient
-from urllib.parse import quote
 from nonebot import on_fullmatch, on_type, require, on_startswith
 from nonebot.adapters.onebot.v11 import PokeNotifyEvent, Bot, GroupMessageEvent, FriendRequestEvent, MessageEvent, PrivateMessageEvent, GroupRequestEvent, GroupIncreaseNoticeEvent
 require("nonebot_plugin_alconna")
