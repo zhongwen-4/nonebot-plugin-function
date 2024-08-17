@@ -1,6 +1,6 @@
 [project]
 name = "nonebot-plugin-function"
-version = "0.1.8.2"
+version = "0.1.8.3"
 description = "奇怪的东西"
 readme = "README.md"
 requires-python = ">=3.9, <4.0"
