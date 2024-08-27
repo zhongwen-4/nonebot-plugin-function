@@ -166,13 +166,10 @@ async def debug_handle(event: MessageEvent):
             return
 
         async with AsyncClient() as cli:
-
-            params = {"name": title, "n": resp}
-            url = await cli.get(f"https://api.xingzhige.com/API/Kugou_GN_new/", params= params)
+            p = {"name": title, "n": resp}
+            url = await cli.get(f"https://api.xingzhige.com/API/Kugou_GN_new/", params= p)
             if url.status_code == 200:
                 url= url.json()
-            
-
                 data = MusicShare(
                     kind= MusicShareKind.QQMusic,
                     title= url["data"]["songname"],
@@ -183,7 +180,7 @@ async def debug_handle(event: MessageEvent):
                 )
 
                 data = UniMessage(data)
-                return
+                await data.finish()
             
             else:
-                await debug.finish("API请求错误, 可能是API跑路了")
+                await debug.finish("获取不到歌曲信息")
